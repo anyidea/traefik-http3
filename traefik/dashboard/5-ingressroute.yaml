@@ -9,7 +9,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
+      match: Host(`your.example.com`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
       services:
         - name: api@internal
           kind: TraefikService
