@@ -1,3 +1,9 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: default
+  name: traefik-ingress-controller
+
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -6,6 +12,7 @@ metadata:
   name: traefik
   labels:
     app: traefik
+
 spec:
   replicas: 1
   selector:
@@ -19,12 +26,11 @@ spec:
       serviceAccountName: traefik-ingress-controller
       containers:
         - name: traefik
-          image: traefik:v2.6
-          imagePullPolicy: IfNotPresent
+          image: traefik:v3.0
           args:
-            - --api
+            - --api.insecure
+            - --accesslog
             - --log.level=DEBUG
-            - --experimental.http3 # Enables the HTTP/3 experimental feature.
             - --entrypoints.web.Address=:80
             - --entrypoints.websecure.Address=:443
             - --entrypoints.websecure.http3 # Enables HTTP/3 on the websecure entrypoint.
